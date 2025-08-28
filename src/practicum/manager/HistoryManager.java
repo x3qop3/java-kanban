@@ -1,12 +1,18 @@
-package practicum.manager;
-import practicum.model.Task;
+package manager;
+
+import taskobject.Task;
 
 import java.util.List;
 
-
 public interface HistoryManager {
-        void add(Task task);
-        void remove(int id);
-        List<Task> getHistory();
 
+    void add(Task task);
+
+    List<Task> getHistList();
+
+    void removeView(int id);
+
+    void clearMap();
+
+    void clearList();
 }
