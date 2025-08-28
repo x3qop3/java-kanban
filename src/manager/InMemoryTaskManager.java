@@ -57,7 +57,6 @@ public class InMemoryTaskManager implements TaskManager {
         idNumber = 0;
     }
 
-
     @Override
     public Task getTask(int id) { //метод для получения обычной задачи
 
@@ -152,7 +151,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 
-
     @Override
     public void removeAllTask() {                                                     //метод для удаления всех задач
         taskMap.keySet().forEach(historyManager::removeView);
@@ -226,7 +224,6 @@ public class InMemoryTaskManager implements TaskManager {
         historyManager.removeView(id);
     } //данный метод при передаче айди удаляет подзадачу как из эпика, так и из хранилища со всеми подзадачами
 
-
     @Override
     public void updateTask(Task task) { //метод для обновления обычной задачи
         if (!hasCross(task)) {
@@ -240,7 +237,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-
+    @Override
     public void updateEpicTask(EpicTask epicTask) {
 
         if (epicMap.containsKey(epicTask.getId())) {
@@ -251,7 +248,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 
-
+    @Override
     public void updateSubTask(SubTask subTask) { //метод для обновления подзадачи
         if (!hasCross(subTask)) {
             if (subMap.containsKey(subTask.getId()) && epicMap.containsKey(subTask.getEpicId()) &&
@@ -320,7 +317,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 
-
     protected void loadTask(Task task) {
         if (task.getId() > idNumber) idNumber = task.getId();
         if (task instanceof EpicTask epic) {
@@ -349,6 +345,5 @@ public class InMemoryTaskManager implements TaskManager {
                 .takeWhile(arg -> !arg.getStartTime().isAfter(task.getEndTime()))
                 .anyMatch(arg -> isTaskCross(arg, task));
     }
-
 
 }
