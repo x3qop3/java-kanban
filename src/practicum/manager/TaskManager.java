@@ -1,48 +1,69 @@
-package practicum.manager;
+package manager;
 
-import practicum.statandtype.Status;
-import practicum.model.Epic;
-import practicum.model.Subtask;
-import practicum.model.Task;
+import taskobject.EpicTask;
+import taskobject.SubTask;
+import taskobject.Task;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface TaskManager {
 
-
-    List<Task> getAllTasks();
-    void deleteAllTasks();
     Task getTask(int id);
-    Task createTask(Task task);
-    void updateTask(Task task);
-    void deleteTask(int id);
+
+    SubTask getSubTask(int id);
+
+    EpicTask getEpicTask(int id);
+
     List<Task> getHistory();
-    boolean containsTask(int id);
-    void updateTaskTime(int taskId, LocalDateTime startTime, Duration duration);
 
-    List<Epic> getAllEpics();
-    void deleteAllEpics();
-    Epic getEpic(int id);
-    Epic createEpic(Epic epic);
-    void updateEpic(Epic epic);
-    void deleteEpic(int id);
-    Status getEpicStatus(int epicId);
-    void updateEpicStatus(int epicId);
-    boolean containsEpic(int id);
+    void clearHistory();
 
-    List<Subtask> getAllSubtasks();
-    void deleteAllSubtasks();
-    Subtask getSubtask(int id);
-    Subtask createSubtask(Subtask subtask);
-    void updateSubtask(Subtask subtask);
-    void deleteSubtask(int id);
-    boolean containsSubtask(int id);
-    void updateSubtaskTime(int subtaskId, LocalDateTime startTime, Duration duration);
+    List<Task> getAllTask();
 
-    List<Subtask> getSubtasksByEpic(int epicId);
+    List<EpicTask> getAllEpicTask();
 
-    boolean isTimeSlotAvailable(LocalDateTime startTime, Duration duration);
-    List<Task> getPrioritizedTasks();
+    List<SubTask> getAllSubTask();
+
+    List<SubTask> getAllSubTasksByEpicId(int epicId);
+
+    List<Task> getAllTaskAllType();
+
+    Set<Task> getPrioritizedTasks();
+
+    Map<Integer, SubTask> getSubMap();
+
+    Map<Integer, Task> getTaskMap();
+
+    Map<Integer, EpicTask> getEpicMap();
+
+    void createTask(Task task);
+
+    void removeAllTask();
+
+    void removeAllEpic();
+
+    void removeAllSub();
+
+    void removeTask(int id);
+
+    void removeEpic(int id);
+
+    void removeSub(int id);
+
+    void removeAllTasksAllType();
+
+    void removeHistoryItem(int id);
+
+    void updateTask(Task task);
+
+    void updateEpicTask(EpicTask epicTask);
+
+    void updateSubTask(SubTask subTask);
+
+    boolean isTaskCross(Task taskA, Task taskB);
+
+    boolean hasCross(Task task);
+
 }

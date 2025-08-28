@@ -1,97 +1,132 @@
-package practicum.manager;
+package manager;
 
-import practicum.model.Task;
+import taskobject.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private static class Node {
-        Task task;
-        Node prev;
-        Node next;
-
-        Node(Task task) {
-            this.task = task;
-            this.prev = null;
-            this.next = null;
-        }
-    }
-
-    private final Map<Integer, Node> taskIdToNode = new HashMap<>();
-
-
-    private Node head;
-    private Node tail;
-
+    private final HandLinkedList<Task> histList = new HandLinkedList<>();
+    private final Map<Integer, HandLinkedList.Node<Task>> histMap = new HashMap<>();
 
     @Override
     public void add(Task task) {
-        if (task == null) {
-            return;
+        if (histMap.containsKey(task.getId())) {
+            histList.removeNode(histMap.get(task.getId()));
+            histMap.remove(task.getId());
         }
-        remove(task.getId());
-        Node newNode = linkLast(task);
-        taskIdToNode.put(task.getId(), newNode);
-    }
 
+        Task copyTask = new Task(task.getTitle(), task.getDescription(), task.getStatus());
+        copyTask.setId(task.getId());
+        histList.linkLast(copyTask);
+        histMap.put(task.getId(), histList.getTail());
+    }
 
     @Override
-    public void remove(int id) {
-        Node node = taskIdToNode.get(id);
-        if (node != null) {
-            removeNode(node);
-            taskIdToNode.remove(id);
-        }
+    public List<Task> getHistList() {
+        return new ArrayList<>(histList.getTasks());
     }
-
 
     @Override
-    public List<Task> getHistory() {
-        return getTasks();
+    public void removeView(int id) {
+        if (histMap.containsKey(id)) {
+            histList.removeNode(histMap.get(id));
+        }
+        histMap.remove(id);
     }
 
-    private Node linkLast(Task task) {
-        Node newNode = new Node(task);
-        if (tail == null) {
-            head = newNode;
-        } else {
-
-            tail.next = newNode;
-            newNode.prev = tail;
-        }
-        tail = newNode;
-        return newNode;
+    @Override
+    public void clearMap() {
+        histMap.clear();
     }
 
-
-    private void removeNode(Node node) {
-        if (node == null) {
-            return;
-        }
-        if (node.prev != null) {
-            node.prev.next = node.next;
-        } else {
-            head = node.next;
-        }
-        if (node.next != null) {
-            node.next.prev = node.prev;
-        } else {
-            tail = node.prev;
-        }
+    @Override
+    public void clearList() {
+        histList.clear();
     }
 
-    private List<Task> getTasks() {
-        List<Task> tasks = new ArrayList<>();
-        Node current = head;
-        while (current != null) {
-            tasks.add(current.task);
-            current = current.next;
+    public static class HandLinkedList<T> {
+
+        private Node<T> head;
+        private Node<T> tail;
+        private int size = 0;
+
+        public int getSize() {
+            return size;
         }
-        return tasks;
+
+        public void linkLast(T t) {
+            final Node<T> oldTail = tail;
+            final Node<T> newTask = new Node<>(oldTail, t, null);
+            tail = newTask;
+            if (oldTail == null) {
+                head = newTask;
+            } else {
+                oldTail.next = newTask;
+            }
+            size++;
+        }
+
+        public Node<T> getTail() {
+            return tail;
+        }
+
+        public ArrayList<Task> getTasks() {
+            ArrayList<Task> tasks = new ArrayList<>();
+            if (head != null) {
+                Node<T> node = head;
+                while (node != null) {
+                    tasks.add((Task) node.data);
+                    node = node.next;
+                }
+            }
+            return tasks;
+        }
+
+        public void removeNode(Node<T> node) {
+            if (node.prev == null && node.next == null) {
+                tail = null;
+                head = null;
+            } else if (node.prev != null && node.next == null) {
+                node.prev.next = null;
+                tail = node.prev;
+            } else if (node.prev == null && node.next != null) {
+                node.next.prev = null;
+                head = node.next;
+            } else {
+                node.prev.next = node.next;
+                node.next.prev = node.prev;
+            }
+            size--;
+        }
+
+        public void clear() {
+            Node<T> current = head;
+            while (current != null) {
+                Node<T> next = current.next;
+                current.prev = null;
+                current.next = null;
+                current.data = null;
+                current = next;
+            }
+            head = null;
+            tail = null;
+            size = 0;
+        }
+
+        static class Node<T> {
+            public T data;
+            public Node<T> prev;
+            public Node<T> next;
+
+            public Node(Node<T> prev, T data, Node<T> next) {
+                this.data = data;
+                this.next = next;
+                this.prev = prev;
+            }
+        }
     }
 }
