@@ -1,6 +1,10 @@
-public class Main {
+package practicum;
 
+import practicum.manager.Managers;
+import practicum.manager.TaskManager;
+
+public class Main {
     public static void main(String[] args) {
-        System.out.println("Поехали!");
+        TaskManager manager = Managers.getDefault();
     }
 }
