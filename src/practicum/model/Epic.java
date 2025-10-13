@@ -40,7 +40,6 @@ public class Epic extends Task {
         subtaskIds.clear();
     }
 
-
     @Override
     public Duration getDuration() {
         return super.getDuration();
@@ -71,6 +70,7 @@ public class Epic extends Task {
     public void updateStatus(Status status) {
         this.setStatus(status);
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -84,5 +84,5 @@ public class Epic extends Task {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), subtaskIds, endTime);
-
-    }}
+    }
+}

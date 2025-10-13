@@ -1,9 +1,9 @@
 package practicum.model;
+
 import practicum.statandtype.Status;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-
 import java.util.Objects;
 
 public class Task {
@@ -21,6 +21,7 @@ public class Task {
         this.duration = duration;
         this.startTime = startTime;
     }
+
     public Task(int id, String title, String description, Status status, Duration duration, LocalDateTime startTime) {
         this.id = id;
         this.title = title;
@@ -29,6 +30,7 @@ public class Task {
         this.duration = duration;
         this.startTime = startTime;
     }
+
     public Task(String title, String description, Status status) { //это для тестов
         this.title = title;
         this.description = description;
@@ -36,23 +38,28 @@ public class Task {
     }
 
     public LocalDateTime getEndTime() {
-        if (startTime == null || duration == null){
-            return  null;
+        if (startTime == null || duration == null) {
+            return null;
         }
         return startTime.plus(duration);
     }
+
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
+
     public void setDuration(Duration duration) {
         this.duration = duration;
     }
-    public Duration getDuration(){
+
+    public Duration getDuration() {
         return duration;
     }
-    public LocalDateTime getStartTime(){
+
+    public LocalDateTime getStartTime() {
         return startTime;
     }
+
     public int getId() {
         return id;
     }
@@ -69,23 +76,21 @@ public class Task {
         return status;
     }
 
-
     public void setId(int id) {
         this.id = id;
     }
 
     public void setStatus(Status status) {
-
         this.status = status;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -103,4 +108,5 @@ public class Task {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, description, status, duration, startTime);
-    }}
+    }
+}
